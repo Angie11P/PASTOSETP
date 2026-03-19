@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="public/logo.png" alt="Logo" width="120" style="border-radius:20%"/>
   <h1>PastoSETP</h1>
   <p><strong>Plataforma integral de movilidad inteligente y atención al ciudadano para Pasto, Nariño.</strong></p>
 </div>
