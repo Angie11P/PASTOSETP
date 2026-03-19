@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { supabase } from '@/src/lib/supabase';
+import toast from 'react-hot-toast';
 import { 
   Users, 
   Plus, 
@@ -89,17 +90,17 @@ export default function ConductorsAdmin() {
 
     // Validations
     if (formData.id.length !== 11 || !/^\d+$/.test(formData.id)) {
-      alert('El ID debe tener exactamente 11 dígitos numéricos');
+      toast.error('El ID debe tener exactamente 11 dígitos numéricos');
       setFormLoading(false);
       return;
     }
     if (formData.phone.length !== 10 || !/^\d+$/.test(formData.phone)) {
-      alert('El teléfono debe tener exactamente 10 dígitos numéricos');
+      toast.error('El teléfono debe tener exactamente 10 dígitos numéricos');
       setFormLoading(false);
       return;
     }
     if (formData.age < 18) {
-      alert('El conductor debe ser mayor de 18 años');
+      toast.error('El conductor debe ser mayor de 18 años');
       setFormLoading(false);
       return;
     }
@@ -123,10 +124,11 @@ export default function ConductorsAdmin() {
         if (error) throw error;
       }
       
+      toast.success('Conductor guardado exitosamente');
       setIsModalOpen(false);
       fetchData();
     } catch (error: any) {
-      alert(error.message || 'Error al guardar el conductor');
+      toast.error(error.message || 'Error al guardar el conductor');
     } finally {
       setFormLoading(false);
     }
@@ -136,8 +138,11 @@ export default function ConductorsAdmin() {
     if (!confirm('¿Estás seguro de eliminar este conductor?')) return;
     
     const { error } = await supabase.from('conductors').delete().eq('id', id);
-    if (error) alert('Error al eliminar: ' + error.message);
-    else fetchData();
+    if (error) toast.error('Error al eliminar: ' + error.message);
+    else {
+      toast.success('Conductor eliminado');
+      fetchData();
+    }
   };
 
   const filteredConductors = conductors.filter(c => 

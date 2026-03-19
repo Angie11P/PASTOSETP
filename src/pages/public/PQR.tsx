@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { supabase } from '@/src/lib/supabase';
 import { refinePQRDescription } from '@/src/services/geminiService';
+import toast from 'react-hot-toast';
 import { 
   MessageSquare, Send, Search, Loader2, CheckCircle2, 
   Clock, AlertCircle, FileText, Sparkles, User, Mail, HelpCircle, FileSignature
@@ -27,7 +28,7 @@ export default function PQR() {
 
   const handleRefine = async () => {
     if (!formData.description || !formData.subject) {
-      alert('Por favor completa el asunto y la descripción para usar la Inteligencia Artificial.');
+      toast.error('Por favor completa el asunto y la descripción para usar la Inteligencia Artificial.');
       return;
     }
     setRefining(true);
@@ -53,7 +54,7 @@ export default function PQR() {
       setSuccess(code);
       setFormData({ user_name: '', user_email: '', subject: '', description: '' });
     } catch (error: any) {
-      alert('Error en la radicación: ' + error.message);
+      toast.error('Error en la radicación: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -73,7 +74,7 @@ export default function PQR() {
       .single();
     
     if (error) {
-      alert('Código inválido o solicitud no encontrada. Asegúrate de incluir el prefijo PQR-');
+      toast.error('Código inválido o solicitud no encontrada. Asegúrate de incluir el prefijo PQR-');
     } else {
       setTrackedPqr(data);
     }

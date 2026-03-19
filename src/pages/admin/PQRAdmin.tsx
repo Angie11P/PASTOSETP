@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/src/lib/supabase';
+import toast from 'react-hot-toast';
 import { 
   MessageSquare, 
   Search, 
@@ -47,8 +48,9 @@ export default function PQRAdmin() {
       .update({ status: newStatus })
       .eq('id', id);
     
-    if (error) alert('Error al actualizar estado');
+    if (error) toast.error('Error al actualizar estado');
     else {
+      toast.success('Estado actualizado correctamente');
       setPqrs(pqrs.map(p => p.id === id ? { ...p, status: newStatus } : p));
       if (selectedPqr?.id === id) setSelectedPqr({ ...selectedPqr, status: newStatus });
     }

@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { supabase } from '@/src/lib/supabase';
+import toast from 'react-hot-toast';
 import { 
   UserCog, 
   Plus, 
@@ -87,13 +88,14 @@ export default function AdminsAdmin() {
         // In a real app, this would involve supabase.auth.admin.createUser
         // which requires a service role key. For this demo, we'll just
         // simulate the profile creation.
-        alert('La creación de usuarios requiere configuración de Supabase Auth Admin. Por ahora, solo puedes editar roles de perfiles existentes.');
+        toast.error('La creación de usuarios requiere configuración de Supabase Auth Admin. Por ahora, solo puedes editar roles de perfiles existentes.');
       }
       
+      toast.success('Administrador guardado exitosamente');
       setIsModalOpen(false);
       fetchAdmins();
     } catch (error: any) {
-      alert(error.message || 'Error al guardar el administrador');
+      toast.error(error.message || 'Error al guardar el administrador');
     } finally {
       setFormLoading(false);
     }
@@ -103,8 +105,11 @@ export default function AdminsAdmin() {
     if (!confirm('¿Estás seguro de eliminar este administrador?')) return;
     
     const { error } = await supabase.from('admins_profile').delete().eq('id', id);
-    if (error) alert('Error al eliminar: ' + error.message);
-    else fetchAdmins();
+    if (error) toast.error('Error al eliminar: ' + error.message);
+    else {
+      toast.success('Administrador eliminado');
+      fetchAdmins();
+    }
   };
 
   return (

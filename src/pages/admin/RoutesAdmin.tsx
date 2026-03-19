@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { supabase } from '@/src/lib/supabase';
+import toast from 'react-hot-toast';
 import { 
   Map as MapIcon, 
   Plus, 
@@ -94,7 +95,7 @@ export default function RoutesAdmin() {
     // Validate 9 stops are full
     const emptyStops = formData.stops.some(s => !s.trim());
     if (emptyStops) {
-      alert('Debes completar el nombre de las 9 paradas específicas.');
+      toast.error('Debes completar el nombre de las 9 paradas específicas.');
       setFormLoading(false);
       return;
     }
@@ -134,10 +135,11 @@ export default function RoutesAdmin() {
       const { error: stopsError } = await supabase.from('stops').insert(stopsToInsert);
       if (stopsError) throw stopsError;
 
+      toast.success('Ruta guardada exitosamente');
       setIsModalOpen(false);
       fetchRoutes();
     } catch (error: any) {
-      alert(error.message || 'Error al guardar la ruta y sus paradas');
+      toast.error(error.message || 'Error al guardar la ruta y sus paradas');
     } finally {
       setFormLoading(false);
     }
@@ -148,8 +150,11 @@ export default function RoutesAdmin() {
     
     // Con ON DELETE CASCADE en la BD, se borran automáticamente sus stops
     const { error } = await supabase.from('routes').delete().eq('id', id);
-    if (error) alert('Error al eliminar: ' + error.message);
-    else fetchRoutes();
+    if (error) toast.error('Error al eliminar: ' + error.message);
+    else {
+      toast.success('Ruta eliminada');
+      fetchRoutes();
+    }
   };
 
   const filteredRoutes = routes.filter(r => 

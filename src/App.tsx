@@ -16,10 +16,12 @@ import ConductorsAdmin from './pages/admin/ConductorsAdmin';
 import RoutesAdmin from './pages/admin/RoutesAdmin';
 import PQRAdmin from './pages/admin/PQRAdmin';
 import AdminsAdmin from './pages/admin/AdminsAdmin';
+import { Toaster } from 'react-hot-toast';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<PublicLayout />}>

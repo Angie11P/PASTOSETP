@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { supabase } from '@/src/lib/supabase';
+import toast from 'react-hot-toast';
 import { 
   Bus, 
   Plus, 
@@ -85,7 +86,7 @@ export default function BusesAdmin() {
     // Validation: Plate ABC123 format (3 letters, 3 numbers)
     const plateRegex = /^[A-Z]{3}\d{3}$/;
     if (!plateRegex.test(formData.plate.toUpperCase())) {
-      alert('La placa debe tener el formato ABC123');
+      toast.error('La placa debe tener el formato ABC123');
       setFormLoading(false);
       return;
     }
@@ -110,10 +111,11 @@ export default function BusesAdmin() {
         if (error) throw error;
       }
       
+      toast.success('Bus guardado exitosamente');
       setIsModalOpen(false);
       fetchData();
     } catch (error: any) {
-      alert(error.message || 'Error al guardar el bus');
+      toast.error(error.message || 'Error al guardar el bus');
     } finally {
       setFormLoading(false);
     }
@@ -123,8 +125,11 @@ export default function BusesAdmin() {
     if (!confirm('¿Estás seguro de eliminar este bus?')) return;
     
     const { error } = await supabase.from('buses').delete().eq('id', id);
-    if (error) alert('Error al eliminar: ' + error.message);
-    else fetchData();
+    if (error) toast.error('Error al eliminar: ' + error.message);
+    else {
+      toast.success('Bus eliminado');
+      fetchData();
+    }
   };
 
   const filteredBuses = buses.filter(bus => 
