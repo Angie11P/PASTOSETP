@@ -74,7 +74,7 @@ export default function Home() {
                 className="w-full max-w-lg h-auto relative z-10 drop-shadow-2xl object-contain"
                 style={{ animation: 'floating 4s ease-in-out infinite' }}
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "../public/bus.png";
+                  (e.target as HTMLImageElement).src = "/bus.png";
                 }}
               />
               <style>{`
